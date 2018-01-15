@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="org.rousseau4j.sample.server" />
+
+    <context:property-placeholder location="classpath*:*.properties" />
+
+    <bean id="serviceRegistry" class="org.rousseau4j.registry.zookeeper.ZookeeperService">
+        <constructor-arg name="zkAddress" value="${zookeeper.registry.address}"/>
+    </bean>
+
+    <!-- 该bean需置于最后，否则将阻塞其他bean的初始化 -->
+    <bean id="rpcServer" class="org.rousseau4j.server.RpcServer">
+        <constructor-arg name="serviceRegistry" ref="serviceRegistry"/>
+        <constructor-arg name="serviceAddress" value="${rpc.service.address}"/>
+    </bean>
+</beans>
