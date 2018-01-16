@@ -19,10 +19,13 @@ import org.rousseau4j.common.codec.RpcEncoder;
 import org.rousseau4j.common.handler.RpcServerHandler;
 import org.rousseau4j.registry.ServiceRegistry;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.annotation.AnnotationBeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.annotation.AnnotationUtils;
 
+import java.lang.reflect.AnnotatedElement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -100,7 +103,8 @@ public class RpcServer implements ApplicationContextAware, InitializingBean{
         Map<String, Object> serviceBeanMap = applicationContext.getBeansWithAnnotation(RousseauService.class);
         if (MapUtils.isNotEmpty(serviceBeanMap)) {
             for (Object serviceBean : serviceBeanMap.values()) {
-                RousseauService rousseauService = serviceBean.getClass().getAnnotation(RousseauService.class);
+                // 如果serviceBean是代理对象，serviceBean.getClass().getAnnotation(RousseauService.class)无法获取到注解
+                RousseauService rousseauService = AnnotationUtils.getAnnotation(serviceBean.getClass(), RousseauService.class);
                 String serviceName = rousseauService.value().getName();
                 String serviceVersion = rousseauService.version();
                 if (StringUtils.isNotBlank(serviceVersion)) {

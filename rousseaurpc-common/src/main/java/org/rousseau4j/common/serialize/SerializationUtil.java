@@ -1,7 +1,6 @@
 package org.rousseau4j.common.serialize;
 
 import com.dyuproject.protostuff.LinkedBuffer;
-import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
@@ -24,6 +23,13 @@ public class SerializationUtil {
 
     private static Objenesis objenesis = new ObjenesisStd(true);
 
+    private static ThreadLocal<LinkedBuffer> linkedBufferThreadLocal = new ThreadLocal<LinkedBuffer>() {
+        @Override
+        protected LinkedBuffer initialValue() {
+            return LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+        }
+    };
+
     /**
      * 序列化
      * @param obj
@@ -32,7 +38,7 @@ public class SerializationUtil {
      */
     public static <T> byte[] serialize(T obj) {
         Schema schema = getSchema(obj.getClass());
-        return ProtostuffIOUtil.toByteArray(obj, schema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
+        return ProtostuffIOUtil.toByteArray(obj, schema, linkedBufferThreadLocal.get().clear());
     }
 
     /**
