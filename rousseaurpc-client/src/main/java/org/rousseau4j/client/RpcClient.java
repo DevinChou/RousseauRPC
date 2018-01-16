@@ -47,7 +47,7 @@ public class RpcClient {
             Channel channel = future.channel();
             channel.writeAndFlush(request).sync();
             channel.closeFuture().sync();
-            return rpcClientHandler.getRpcResponse();
+            return rpcClientHandler.getRpcResponse(request.getRequestId());
         } finally {
             group.shutdownGracefully();
         }
