@@ -28,11 +28,11 @@ public class RpcProxy {
         this.serviceDiscovery = serviceDiscovery;
     }
 
-    public <T> T create(Class<?> interfaceClass) {
+    public <T> T create(Class<T> interfaceClass) {
         return create(interfaceClass, "");
     }
 
-    public <T> T create(Class<?> interfaceClass, String serviceVersion) {
+    public <T> T create(Class<T> interfaceClass, String serviceVersion) {
         return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[]{interfaceClass},
                 (o, method, args) -> {
                     RpcRequest rpcRequest = new RpcRequest();
@@ -54,10 +54,7 @@ public class RpcProxy {
                     if (StringUtils.isBlank(serviceAddress)) {
                         throw new RuntimeException(String.format("The address of service %s cannot be found", serviceName));
                     }
-                    String[] array = StringUtils.split(serviceAddress, ":");
-                    String host = array[0];
-                    int port = Integer.valueOf(array[1]);
-                    RpcClient client = new RpcClient(host, port);
+                    RpcClient client = RpcClientManager.getRpcClient(serviceAddress);
                     RpcResponse rpcResponse = client.send(rpcRequest);
                     if (rpcResponse.getException() != null) {
                         throw rpcResponse.getException();

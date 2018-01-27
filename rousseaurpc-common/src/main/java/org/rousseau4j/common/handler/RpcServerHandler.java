@@ -11,6 +11,7 @@ import net.sf.cglib.reflect.FastMethod;
 import org.apache.commons.lang3.StringUtils;
 import org.rousseau4j.common.RpcRequest;
 import org.rousseau4j.common.RpcResponse;
+import org.rousseau4j.common.RpcType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,9 +37,17 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
     private static ExecutorService executorService;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcRequest rpcRequest) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, RpcRequest rpcRequest) throws Exception {
         // 异步执行，避免阻塞netty的工作线程
         submit(() -> {
+            if (rpcRequest.getType() == RpcType.HEARTBEAT) {
+                log.debug("Receive heartbeat package");
+                RpcResponse response = new RpcResponse();
+                response.setType(RpcType.HEARTBEAT);
+                ctx.writeAndFlush(response);
+                return;
+            }
+
             log.debug("Receive request " + rpcRequest);
             RpcResponse rpcResponse = new RpcResponse();
             rpcResponse.setRequestId(rpcRequest.getRequestId());
@@ -49,13 +58,7 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
                 log.error("Invoke request failed", e);
                 rpcResponse.setException(e);
             }
-            channelHandlerContext.writeAndFlush(rpcResponse).addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                    log.debug("Send Response " + rpcResponse);
-                    channelFuture.channel().close();
-                }
-            });
+            ctx.writeAndFlush(rpcResponse).addListener((channelFuture) -> log.debug("Send Response " + rpcResponse));
         });
     }
 

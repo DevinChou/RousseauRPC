@@ -14,9 +14,7 @@
         <module>rousseaurpc-server</module>
         <module>rousseaurpc-client</module>
         <module>rousseaurpc-registry</module>
-        <module>rousseaurpc-sample-api</module>
-        <module>rousseaurpc-sample-server</module>
-        <module>rousseaurpc-sample-client</module>
+        <module>rousseaurpc-sample</module>
     </modules>
 
     <properties>

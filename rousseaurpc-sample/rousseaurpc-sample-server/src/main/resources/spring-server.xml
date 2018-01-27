@@ -6,7 +6,7 @@
 
     <context:component-scan base-package="org.rousseau4j.sample.server" />
 
-    <context:property-placeholder location="classpath*:*.properties" />
+    <context:property-placeholder location="classpath*:rpc-server.properties" />
 
     <bean id="serviceRegistry" class="org.rousseau4j.registry.zookeeper.ZookeeperService">
         <constructor-arg name="zkAddress" value="${zookeeper.registry.address}"/>

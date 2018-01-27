@@ -10,6 +10,8 @@ import lombok.ToString;
 @ToString
 public class RpcResponse {
 
+    private RpcType type;
+
     private String requestId;
 
     private Exception exception;

@@ -10,6 +10,8 @@ import lombok.ToString;
 @ToString
 public class RpcRequest {
 
+    private RpcType type;
+
     private String requestId;
 
     private String interfaceName;

@@ -11,10 +11,19 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class HelloConsumer {
 
     public static void main(String[] args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring-client.xml");
         RpcProxy rpcProxy = context.getBean(RpcProxy.class);
 
         HelloService helloService = rpcProxy.create(HelloService.class);
         System.out.println(helloService.sayHello("Rousseau"));
+
+        helloService = rpcProxy.create(HelloService.class);
+        System.out.println(helloService.sayHello("Rousseau"));
+
+        try {
+            Thread.sleep(10000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
