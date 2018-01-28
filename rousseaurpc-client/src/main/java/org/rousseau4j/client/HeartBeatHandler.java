@@ -48,4 +48,11 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter{
             ctx.fireUserEventTriggered(evt);
         }
     }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error("Client caught error", cause);
+        RpcClientManager.removeRpcClient(serviceAddress);
+        ctx.close();
+    }
 }

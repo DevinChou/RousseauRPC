@@ -29,12 +29,6 @@ public class RpcClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
         }
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("Client caught error", cause);
-        ctx.close();
-    }
-
     public RpcResponse getRpcResponse(String requestId) throws InterruptedException {
         Long time = System.currentTimeMillis();
         while (responseMap.get(requestId) == null) {

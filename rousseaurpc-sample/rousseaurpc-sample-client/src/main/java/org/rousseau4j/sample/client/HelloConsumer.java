@@ -14,16 +14,14 @@ public class HelloConsumer {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-client.xml");
         RpcProxy rpcProxy = context.getBean(RpcProxy.class);
 
-        HelloService helloService = rpcProxy.create(HelloService.class);
-        System.out.println(helloService.sayHello("Rousseau"));
-
-        helloService = rpcProxy.create(HelloService.class);
-        System.out.println(helloService.sayHello("Rousseau"));
-
-        try {
-            Thread.sleep(10000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for (int i = 0; i < 20; i++) {
+            HelloService helloService = rpcProxy.create(HelloService.class);
+            System.out.println(helloService.sayHello("Rousseau"));
+            try {
+                Thread.sleep(5000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
