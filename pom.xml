@@ -33,7 +33,7 @@
         <zookeeper.version>3.4.10</zookeeper.version>
         <zkclient.version>0.4</zkclient.version>
         <commons-lang.version>3.3.2</commons-lang.version>
-        <commons-collections.version>4.0</commons-collections.version>
+        <commons-collections.version>4.1</commons-collections.version>
         <fastjson.version>1.2.31</fastjson.version>
         <lombok.version>1.16.18</lombok.version>
         <!-- Test libs -->
