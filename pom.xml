@@ -30,7 +30,7 @@
         <protostuff.version>1.0.9</protostuff.version>
         <objenesis.version>2.1</objenesis.version>
         <cglib.version>3.1</cglib.version>
-        <zookeeper.version>3.4.10</zookeeper.version>
+        <zookeeper.version>3.4.14</zookeeper.version>
         <zkclient.version>0.4</zkclient.version>
         <commons-lang.version>3.3.2</commons-lang.version>
         <commons-collections.version>4.0</commons-collections.version>
